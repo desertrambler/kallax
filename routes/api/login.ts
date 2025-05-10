@@ -1,41 +1,50 @@
-import { DB } from "https://deno.land/x/sqlite/mod.ts";
+import { DB, QueryParameter } from "https://deno.land/x/sqlite/mod.ts";
+import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 import { Handlers } from "$fresh/server.ts";
 
 export const handler: Handlers = {
   async POST(req, _ctx) {
     const formData = await req.formData();
-    console.log("Form data:", formData);
 
     const email = formData.get("email");
     const password = formData.get("password");
-    console.log("Email:", email);
-    console.log("Password:", password);
 
-    return new Response("Body logged", {
-      headers: { "Content-Type": "text/plain" },
-    });
+    if (typeof email !== "string" || typeof password !== "string") {
+      return new Response("Invalid input", { status: 400 });
+    }
+
+    try {
+      await authenticateUser(email, password);
+      return new Response("User authenticated; JWT created", {
+        headers: { "Content-Type": "text/plain" },
+      });
+    } catch (err) {
+      console.error("Error authenticating user:", err);
+      return new Response("Internal server error", { status: 500 });
+    }
   },
 };
 
+const authenticateUser = async (
+  inputtedEmail: string,
+  inputtedPassword: string,
+): Promise<void> => {
+    // Get DB
+    const db = new DB("kallax.db");
+    // Check all users in the db
+      const existingUserEmail = db.execute(`
+    SELECT * FROM users WHERE email = ?
+  `, [inputtedEmail]);
 
-// Database function (not async, as it uses only sync methods)
-const test_db = (): void => {
-  const db = new DB("kallax.db");
-
-  db.execute(`
-    CREATE TABLE IF NOT EXISTS people (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT
-    )
-  `);
-
-  for (const name of ["Peter Parker", "Clark Kent", "Bruce Wayne"]) {
-    db.query("INSERT INTO people (name) VALUES (?)", [name]);
+  if (!existingUserEmail) {
+    return 'User does not exist'
+  } else {
+    const result = await bcrypt.compare("test", hash);
   }
 
-  for (const [name] of db.query("SELECT name FROM people")) {
-    console.log(name);
-  }
+
+  console.log(existingUserEmail)
+
 
   db.close();
 };

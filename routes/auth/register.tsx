@@ -25,15 +25,26 @@ export default function LoginPage() {
                         placeholder="••••••••"
                         />
                     </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1" for="confirmation">confirmation</label>
+                        <input
+                        type="password"
+                        name="confirmation"
+                        id="confirmation"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                        placeholder="••••••••"
+                        />
+                    </div>
                     <button
                         type="submit"
                         class="w-full py-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors"
                     >
-                        Log In
+                        Register
                     </button>
                 </form>
             </div>
         </div>
+
     </main>
   );
 }
