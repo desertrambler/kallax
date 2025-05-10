@@ -13,7 +13,9 @@ export const handler: Handlers = {
       return new Response("Invalid input", { status: 400 });
     }
 
-    try {
+    console.log(email, password)
+    return new Response("Success", {status: 200});
+    /*try {
       await saveUserAndPassword(email, password);
       return new Response("User saved", {
         headers: { "Content-Type": "text/plain" },
@@ -21,7 +23,7 @@ export const handler: Handlers = {
     } catch (err) {
       console.error("Error saving user:", err);
       return new Response("Internal server error", { status: 500 });
-    }
+    }*/
   },
 };
 
