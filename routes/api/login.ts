@@ -20,7 +20,7 @@ export const handler: Handlers = {
 
 // Database function (not async, as it uses only sync methods)
 const test_db = (): void => {
-  const db = new DB("test.db");
+  const db = new DB("kallax.db");
 
   db.execute(`
     CREATE TABLE IF NOT EXISTS people (
