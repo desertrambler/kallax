@@ -2,11 +2,17 @@ import { useState } from "preact/hooks";
 
 export default function RegisterForm() {
   const [password, setPassword] = useState("");
+  const [confirmation, setConfirmation] = useState("")
 
   const handlePasswordBlur = (event: Event) => {
     const target = event.target as HTMLInputElement;
     console.log("Current value:", target.value);
   };
+
+  const handleConfirmationBlur = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    console.log("Current value:", target.value)
+  }
 
   return (
     <form method="POST" action="/api/register_user" class="space-y-4">
@@ -41,6 +47,9 @@ export default function RegisterForm() {
           id="confirmation"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
           placeholder="••••••••"
+          value={confirmation}
+          onInput={(e) => setConfirmation((e.target as HTMLInputElement).value)}
+          onBlur={handleConfirmationBlur}
         />
       </div>
       <button
