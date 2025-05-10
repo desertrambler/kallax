@@ -1,21 +1,29 @@
 import { useState } from "preact/hooks";
 
 export default function RegisterForm() {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmation, setConfirmation] = useState("")
+  const [confirmation, setConfirmation] = useState("");
 
-  const handlePasswordBlur = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    console.log("Current value:", target.value);
+  const handleSubmit = (e: Event) => {
+    e.preventDefault();
+    if (password !== confirmation) {
+      alert("Password and Confirmation must match");
+      return;
+    }
+
+    if (email || password || confirmation) {
+        alert("Please fill in all fields");
+        return;
+    }
+
+    // Submit the form manually if passwords match
+    const form = e.target as HTMLFormElement;
+    form.submit();
   };
 
-  const handleConfirmationBlur = (event: Event) => {
-    const target = event.target as HTMLInputElement
-    console.log("Current value:", target.value)
-  }
-
   return (
-    <form method="POST" action="/api/register_user" class="space-y-4">
+    <form method="POST" action="/api/register_user" onSubmit={handleSubmit} class="space-y-4">
       <div>
         <label for="email" class="block text-sm text-gray-600 mb-1">Email</label>
         <input
@@ -24,6 +32,9 @@ export default function RegisterForm() {
           id="email"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
           placeholder="you@example.com"
+          value={email}
+          onInput={(e) => setEmail((e.target as HTMLInputElement).value)}
+          required
         />
       </div>
       <div>
@@ -36,7 +47,7 @@ export default function RegisterForm() {
           placeholder="••••••••"
           value={password}
           onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
-          onBlur={handlePasswordBlur}
+          required
         />
       </div>
       <div>
@@ -49,7 +60,7 @@ export default function RegisterForm() {
           placeholder="••••••••"
           value={confirmation}
           onInput={(e) => setConfirmation((e.target as HTMLInputElement).value)}
-          onBlur={handleConfirmationBlur}
+          required
         />
       </div>
       <button
