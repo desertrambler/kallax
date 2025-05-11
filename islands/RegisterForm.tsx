@@ -52,10 +52,6 @@ export default function RegisterForm() {
       >
         Register
       </button>
-
-      <p className="text-xs mt-4">Email: {email}</p>
-      <p className="text-xs">Password: {password}</p>
-      <p className="text-xs">Confirmation: {confirmation}</p>
     </form>
   );
 }
