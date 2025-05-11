@@ -6,7 +6,7 @@ export function Navbar() {
             </div>
 
             <div class="hidden md:flex space-x-6 text-white">
-                <a href="/wishlist" class="hover:text-gray-600">Library</a>
+                <a href="/library/home" class="hover:text-gray-600">Library</a>
                 <a href="/tags" class="hover:text-gray-600">Discover</a>
                 <a href="/import" class="hover:text-gray-600">Profile</a>
             </div>

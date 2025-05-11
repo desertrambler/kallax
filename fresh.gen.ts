@@ -11,6 +11,7 @@ import * as $auth_register from "./routes/auth/register.tsx";
 import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $home_dashboard from "./routes/home/dashboard.tsx";
 import * as $index from "./routes/index.tsx";
+import * as $library_home from "./routes/library/home.tsx";
 import * as $Counter from "./islands/Counter.tsx";
 import * as $NavbarIsland from "./islands/NavbarIsland.tsx";
 import * as $RegisterForm from "./islands/RegisterForm.tsx";
@@ -27,6 +28,7 @@ const manifest = {
     "./routes/greet/[name].tsx": $greet_name_,
     "./routes/home/dashboard.tsx": $home_dashboard,
     "./routes/index.tsx": $index,
+    "./routes/library/home.tsx": $library_home,
   },
   islands: {
     "./islands/Counter.tsx": $Counter,
