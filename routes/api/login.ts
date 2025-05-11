@@ -3,6 +3,7 @@ import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 import { Handlers } from "$fresh/server.ts";
 import { JWTPayload, jwtVerify, SignJWT } from "npm:jose@5.9.6";
 import "jsr:@std/dotenv/load";
+import { setCookie } from "https://deno.land/std@0.207.0/http/cookie.ts";
 
 const secret = new TextEncoder().encode(Deno.env.get("JWT_SECRET"));
 
@@ -24,10 +25,22 @@ export const handler: Handlers = {
 
       const jwt = await createJWT({ email });
 
-      return new Response(`JWT: ${jwt}`, {
-        status: 200,
-        headers: { "Content-Type": "text/plain" },
+      const headers = new Headers();
+
+      setCookie(headers, {
+        name: "Auth",
+        value: jwt,
+        path: "/",
+        //domain: "domain.com",
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+        expires: new Date(Date.now() + 500000),
       });
+
+      headers.set("Content-Type", "text/plain");
+
+      return new Response("Cookie set", { headers });
 
     } catch (err) {
       console.error("Authentication error:", err);
@@ -43,7 +56,9 @@ const authenticateUser = async (
   const db = new DB("kallax.db");
 
   try {
-    const rows = [...db.query("SELECT hashed_password FROM users WHERE email = ?", [email])];
+    const rows = [
+      ...db.query("SELECT hashed_password FROM users WHERE email = ?", [email]),
+    ];
 
     if (rows.length === 0) {
       return false;
@@ -51,7 +66,6 @@ const authenticateUser = async (
 
     const hashedPassword = rows[0][0] as string;
     return await bcrypt.compare(password, hashedPassword);
-
   } finally {
     db.close();
   }
