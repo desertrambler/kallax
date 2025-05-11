@@ -6,27 +6,27 @@ export default function RegisterForm() {
   const confirmation = signal("");
 
   return (
-    <form method="POST" action="/api/register_user" className="space-y-4">
+    <form method="POST" action="/api/register_user" className="space-y-4 p-4 border border-black bg-white text-black font-mono">
       <div>
-        <label for="email" className="block text-sm text-gray-600 mb-1">Email</label>
+        <label htmlFor="email" className="block text-sm mb-1 uppercase tracking-wide text-red-700">Email</label>
         <input
           type="email"
           name="email"
           id="email"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
+          className="w-full px-2 py-1 border border-black bg-white text-black focus:outline-none focus:border-red-700"
           placeholder="you@example.com"
-          value={email} // Display the signal's value
-          onInput={(e) => email.value = (e.target as HTMLInputElement).value} // Update the signal on input
+          value={email}
+          onInput={(e) => email.value = (e.target as HTMLInputElement).value}
           required
         />
       </div>
       <div>
-        <label for="password" className="block text-sm text-gray-600 mb-1">Password</label>
+        <label htmlFor="password" className="block text-sm mb-1 uppercase tracking-wide text-red-700">Password</label>
         <input
           type="password"
           name="password"
           id="password"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
+          className="w-full px-2 py-1 border border-black bg-white text-black focus:outline-none focus:border-red-700"
           placeholder="••••••••"
           value={password}
           onInput={(e) => password.value = (e.target as HTMLInputElement).value}
@@ -34,12 +34,12 @@ export default function RegisterForm() {
         />
       </div>
       <div>
-        <label for="confirmation" className="block text-sm text-gray-600 mb-1">Confirmation</label>
+        <label htmlFor="confirmation" className="block text-sm mb-1 uppercase tracking-wide text-red-700">Confirmation</label>
         <input
           type="password"
           name="confirmation"
           id="confirmation"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
+          className="w-full px-2 py-1 border border-black bg-white text-black focus:outline-none focus:border-red-700"
           placeholder="••••••••"
           value={confirmation}
           onInput={(e) => confirmation.value = (e.target as HTMLInputElement).value}
@@ -48,14 +48,14 @@ export default function RegisterForm() {
       </div>
       <button
         type="submit"
-        className="w-full py-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors"
+        className="w-full py-2 px-4 border-2 border-black bg-red-700 text-white uppercase font-bold hover:bg-white hover:text-red-700 transition-colors"
       >
         Register
       </button>
 
-      <p>Email: {email}</p>
-      <p>Password: {password}</p>
-      <p>Confirmation: {confirmation}</p>
+      <p className="text-xs mt-4">Email: {email}</p>
+      <p className="text-xs">Password: {password}</p>
+      <p className="text-xs">Confirmation: {confirmation}</p>
     </form>
   );
 }
