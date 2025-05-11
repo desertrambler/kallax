@@ -1,4 +1,4 @@
-import { DB, QueryParameter } from "https://deno.land/x/sqlite/mod.ts";
+import { DB } from "https://deno.land/x/sqlite/mod.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 import { Handlers } from "$fresh/server.ts";
 
@@ -25,26 +25,37 @@ export const handler: Handlers = {
   },
 };
 
-const authenticateUser = async (
+const authenticateUser = (
   inputtedEmail: string,
   inputtedPassword: string,
-): Promise<void> => {
-    // Get DB
-    const db = new DB("kallax.db");
-    // Check all users in the db
-      const existingUserEmail = db.execute(`
-    SELECT * FROM users WHERE email = ?
-  `, [inputtedEmail]);
+): void => {
+  const db = new DB("kallax.db");
 
-  if (!existingUserEmail) {
-    return 'User does not exist'
-  } else {
-    const result = await bcrypt.compare("test", hash);
+  try {
+    const rows = [...db.query(
+      "SELECT * FROM users WHERE email = ?",
+      [inputtedEmail],
+    )];
+
+    if (rows.length === 0) {
+      console.log("User not found.");
+    } else {
+      const db_output = rows[0].toString();
+
+      // Check if user is in the output - TODO: register more users for testing more output
+
+      const password_hash = db_output.split(",")[2].trim();
+
+      console.log(password_hash)
+
+      // TODO: compare inputtedPassword with passwordHash
+      //const result = bcrypt.compare(inputtedPassword, passwordHash);
+    }
+  } catch (err) {
+    console.error("Database error:", err);
+  } finally {
+    db.close();
   }
-
-
-  console.log(existingUserEmail)
-
-
-  db.close();
 };
+
+

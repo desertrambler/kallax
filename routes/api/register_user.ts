@@ -33,9 +33,6 @@ const saveUserAndPassword = async (
 ): Promise<void> => {
   const salt = await bcrypt.genSalt(8);
   const hashedPassword = await bcrypt.hash(plainPassword, salt);
-  // TODO: use this to compare hashes:
-  // const result = await bcrypt.compare("test", hash);
-
   const db = new DB("kallax.db");
 
   db.execute(`
