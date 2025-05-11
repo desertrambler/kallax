@@ -22,8 +22,9 @@ export const handler: Handlers = {
         return new Response("Unauthorized", { status: 401 });
       }
 
-      // In real use, you'd generate and return a JWT or session here
-      return new Response("User authenticated; JWT created", {
+      const jwt = await createJWT({ email });
+
+      return new Response(`JWT: ${jwt}`, {
         status: 200,
         headers: { "Content-Type": "text/plain" },
       });
@@ -48,10 +49,33 @@ const authenticateUser = async (
       return false;
     }
 
-    const [hashedPassword] = String(rows[0]);
+    const hashedPassword = rows[0][0] as string;
     return await bcrypt.compare(password, hashedPassword);
 
   } finally {
     db.close();
   }
 };
+
+async function createJWT(payload: JWTPayload): Promise<string> {
+  const jwt = await new SignJWT(payload)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("1h")
+    .sign(secret);
+
+  return jwt;
+}
+
+// TODO: use this to verify JWT's
+/*async function verifyJWT(token: string): Promise<JWTPayload | null> {
+  try {
+
+    const { payload } = await jwtVerify(token, secret);
+    console.log("JWT is valid:", payload);
+    return payload;
+  } catch (error) {
+    console.error("Invalid JWT:", error);
+    return null;
+  }
+}*/
