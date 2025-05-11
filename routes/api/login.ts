@@ -1,11 +1,14 @@
 import { DB } from "https://deno.land/x/sqlite/mod.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 import { Handlers } from "$fresh/server.ts";
+import { JWTPayload, jwtVerify, SignJWT } from "npm:jose@5.9.6";
+import "jsr:@std/dotenv/load";
+
+const secret = new TextEncoder().encode(Deno.env.get("JWT_SECRET"));
 
 export const handler: Handlers = {
-  async POST(req, _ctx) {
+  async POST(req) {
     const formData = await req.formData();
-
     const email = formData.get("email");
     const password = formData.get("password");
 
@@ -14,48 +17,41 @@ export const handler: Handlers = {
     }
 
     try {
-      await authenticateUser(email, password);
+      const isValid = await authenticateUser(email, password);
+      if (!isValid) {
+        return new Response("Unauthorized", { status: 401 });
+      }
+
+      // In real use, you'd generate and return a JWT or session here
       return new Response("User authenticated; JWT created", {
+        status: 200,
         headers: { "Content-Type": "text/plain" },
       });
+
     } catch (err) {
-      console.error("Error authenticating user:", err);
-      return new Response("Internal server error", { status: 500 });
+      console.error("Authentication error:", err);
+      return new Response("Internal Server Error", { status: 500 });
     }
   },
 };
 
-const authenticateUser = (
-  inputtedEmail: string,
-  inputtedPassword: string,
-): void => {
+const authenticateUser = async (
+  email: string,
+  password: string,
+): Promise<boolean> => {
   const db = new DB("kallax.db");
 
   try {
-    const rows = [...db.query(
-      "SELECT * FROM users WHERE email = ?",
-      [inputtedEmail],
-    )];
+    const rows = [...db.query("SELECT hashed_password FROM users WHERE email = ?", [email])];
 
     if (rows.length === 0) {
-      console.log("User not found.");
-    } else {
-      const db_output = rows[0].toString();
-
-      // Check if user is in the output - TODO: register more users for testing more output
-
-      const password_hash = db_output.split(",")[2].trim();
-
-      console.log(password_hash)
-
-      // TODO: compare inputtedPassword with passwordHash
-      //const result = bcrypt.compare(inputtedPassword, passwordHash);
+      return false;
     }
-  } catch (err) {
-    console.error("Database error:", err);
+
+    const [hashedPassword] = String(rows[0]);
+    return await bcrypt.compare(password, hashedPassword);
+
   } finally {
     db.close();
   }
 };
-
-
