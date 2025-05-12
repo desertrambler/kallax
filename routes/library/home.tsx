@@ -30,7 +30,7 @@ export default function Library() {
 
                         <div className="flex items-center gap-3">
                             <button type="submit" className="w-full border border-black py-2 font-bold uppercase hover:bg-black hover:text-white transition-none">
-                                Add A Single Book
+                                <a href="/library/add">Add A Single Book</a>
                             </button>
                             <button type="submit" className="w-full border border-black py-2 font-bold uppercase hover:bg-black hover:text-white transition-none">
                                 Import from Goodreads
