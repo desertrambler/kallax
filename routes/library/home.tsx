@@ -28,7 +28,7 @@ export default function Library() {
                             </select>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                             <button type="submit" className="w-full border border-black py-2 font-bold uppercase hover:bg-black hover:text-white transition-none">
                                 Add A Single Book
                             </button>
