@@ -28,6 +28,20 @@ export default function Library() {
                             </select>
                         </div>
 
+                        <div className="flex items-center gap-2">
+                            <button type="submit" className="w-full border border-black py-2 font-bold uppercase hover:bg-black hover:text-white transition-none">
+                                Add A Single Book
+                            </button>
+                            <button type="submit" className="w-full border border-black py-2 font-bold uppercase hover:bg-black hover:text-white transition-none">
+                                Import from Goodreads
+                            </button>
+                            <button type="submit" className="w-full border border-black py-2 font-bold uppercase hover:bg-black hover:text-white transition-none">
+                                Import from Kindle
+                            </button>
+                        </div>
+
+
+
                         {/* Filter Categories */}
                         <div className="flex items-center gap-2">
                             <label htmlFor="category" className="text-base uppercase font-bold">Filter:</label>
